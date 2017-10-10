@@ -23,7 +23,6 @@ from collections import namedtuple, OrderedDict
 flags = tf.app.flags
 flags.DEFINE_string('csv_input', '', 'Path to the CSV input')
 flags.DEFINE_string('output_path', '', 'Path to output TFRecord')
-flags.DEFINE_string('test_percent', 0.1, 'Percent of tfrecords to be for test dataset')
 FLAGS = flags.FLAGS
 
 
