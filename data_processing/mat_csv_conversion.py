@@ -35,21 +35,25 @@ def mat_to_csv(mat_list, mat_struct):
 def main():
 
 	mat_list = []
+	column_name = ['filename', 'width', 'height', 'class', 'xmin', 'ymin', 'xmax', 'ymax']
 
 	set = 'train' #train or test set
 	mat_contents = sio.loadmat('annotations/'+set+'set_annos.mat')
 	mat_struct = mat_contents[set] #retrieve contents from struct name $set
 	mat_to_csv(mat_list, mat_struct)
 	
-	set = 'train' #train or test set
+	mat_df = pd.DataFrame(mat_list, columns=column_name)
+	mat_df.to_csv('annotations/car_labels_'+set+'.csv', index=None)
+	
+	mat_list = []
+	
+	set = 'test' #train or test set
 	mat_contents = sio.loadmat('annotations/'+set+'set_annos.mat')
 	mat_struct = mat_contents[set] #retrieve contents from struct named $set
 	mat_to_csv(mat_list, mat_struct)
-	
-	column_name = ['filename', 'width', 'height', 'class', 'xmin', 'ymin', 'xmax', 'ymax']
+
 	mat_df = pd.DataFrame(mat_list, columns=column_name)
-	
-	mat_df.to_csv('car_labels.csv', index=None)
+	mat_df.to_csv('annotations/car_labels_'+set+'.csv', index=None)
 	
 	print('Successfully converted xml to csv.')
 	

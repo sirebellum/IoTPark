@@ -17,18 +17,19 @@ import pandas as pd
 import tensorflow as tf
 
 from PIL import Image
-from object_detection.utils import dataset_util
+import dataset_util
 from collections import namedtuple, OrderedDict
 
 flags = tf.app.flags
 flags.DEFINE_string('csv_input', '', 'Path to the CSV input')
 flags.DEFINE_string('output_path', '', 'Path to output TFRecord')
+flags.DEFINE_string('test_percent', 0.1, 'Percent of tfrecords to be for test dataset')
 FLAGS = flags.FLAGS
 
 
 # TO-DO replace this with label map
 def class_text_to_int(row_label):
-    if row_label == 'raccoon':
+    if row_label == 'car':
         return 1
     else:
         None
