@@ -37,15 +37,18 @@ def main():
 	mat_list = []
 	column_name = ['filename', 'width', 'height', 'class', 'xmin', 'ymin', 'xmax', 'ymax']
 
+	
+	### Pull data from trainset_annos.mat ###
 	set = 'train' #train or test set
 	mat_contents = sio.loadmat('annotations/'+set+'set_annos.mat')
 	mat_struct = mat_contents[set] #retrieve contents from struct name $set
-	mat_to_csv(mat_list, mat_struct)
+	mat_to_csv(mat_list, mat_struct) #Appends rows onto list structure
 	
 	mat_df = pd.DataFrame(mat_list, columns=column_name)
-	mat_df.to_csv('annotations/car_labels_'+set+'.csv', index=None)
+	mat_df.to_csv('annotations/car_labels_'+set+'.csv', index=None) #Write list to actual csv file
 	
-	mat_list = []
+	### Pull data from testset_annos.mat ###
+	mat_list = [] #Clear data from trainset
 	
 	set = 'test' #train or test set
 	mat_contents = sio.loadmat('annotations/'+set+'set_annos.mat')
