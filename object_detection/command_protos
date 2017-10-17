@@ -9,3 +9,8 @@ python export_inference_graph.py \
 --pipeline_config_path /home/joshua/gits/IoTPark/training/models/faster_rcnn_inception_resnet_v2_atrous_coco_11_06_2017/faster_rcnn_inception_resnet_v2_atrous_coco_11_06_2017.config \
 --trained_checkpoint_prefix /home/joshua/gits/IoTPark/training/train_dir/rcnn_inception_ww41b/model.ckpt-##### \
 --output_directory /home/joshua/gits/IoTPark/training/frozen/rcnn_inception_ww41b
+
+python eval.py --logtostderr \
+--checkpoint_dir=/home/joshua/gits/IoTPark/training/train_dir/rcnn_inception_ww41b \
+--eval_dir=/home/joshua/gits/IoTPark/training/eval_dir/rcnn_inception_ww41b \
+--pipeline_config_path=/home/joshua/gits/IoTPark/training/models/faster_rcnn_inception_resnet_v2_atrous_coco_11_06_2017/faster_rcnn_inception_resnet_v2_atrous_coco_11_06_2017.config
