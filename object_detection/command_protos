@@ -1,6 +1,6 @@
 python train.py \
 --logtostderr \
---train_dir=/home/joshua/gits/IoTPark/training/train_dir/[trained model dir] \
+--train_dir=/home/joshua/gits/IoTPark/training/train_dir/[train model dir] \
 --pipeline_config_path=/home/joshua/gits/IoTPark/training/feature_extractors/[feature extractor]/[feature extractor].config \
 > train.log 2>&1 &
 
