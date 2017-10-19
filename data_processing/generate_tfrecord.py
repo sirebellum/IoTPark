@@ -90,6 +90,14 @@ def main(_):
         tf_example = create_tf_example(group, path)
         writer.write(tf_example.SerializeToString())
 
+    ### Write new images ###
+    path = os.path.join(os.getcwd(), 'images_new')
+    examples = pd.read_csv(FLAGS.csv_input.replace('.csv', '_new.csv'))
+    grouped = split(examples, 'filename')
+    for group in grouped:
+        tf_example = create_tf_example(group, path)
+        writer.write(tf_example.SerializeToString())
+
     writer.close()
     output_path = os.path.join(os.getcwd(), FLAGS.output_path)
     print('Successfully created the TFRecords: {}'.format(output_path))
