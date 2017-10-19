@@ -6,6 +6,9 @@ import pandas as pd
 import xml.etree.ElementTree as ET
 from PIL import Image
 
+def num_files(path):
+    return len(os.listdir(path))
+
 def parse_xml(anno_list, filename):
 
     im = Image.open(filename+'.jpg')
@@ -61,11 +64,17 @@ def main():
     anno_list = []
     column_name = ['filename', 'width', 'height', 'class', 'xmin', 'ymin', 'xmax', 'ymax']
 
+    x = 0
     for infile in glob.glob("images_new/*.jpg"):
         file, ext = os.path.splitext(infile)
         parse_xml(anno_list, file)
+        x = x + 1
+        if x == 11000:
+            anno_df = pd.DataFrame(anno_list, columns=column_name)
+            anno_df.to_csv('car_labels_train.csv', index=None) #Write list to actual csv file
+            anno_list = []
 
     anno_df = pd.DataFrame(anno_list, columns=column_name)
-    anno_df.to_csv('car_labels.csv', index=None) #Write list to actual csv file
+    anno_df.to_csv('car_labels_test.csv', index=None) #Write list to actual csv file
 
 main()
