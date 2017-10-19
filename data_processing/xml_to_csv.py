@@ -48,7 +48,7 @@ def parse_xml(anno_list, filename):
             if y3 < ymin: ymin = y3
             if y3 > ymax: ymax = y3
 
-            value = (filename+'.jpg',
+            value = (filename.replace('images_new/', '')+'.jpg',
                      width,
                      height,
                      'car',
