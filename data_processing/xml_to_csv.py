@@ -71,10 +71,10 @@ def main():
         x = x + 1
         if x == 11000:
             anno_df = pd.DataFrame(anno_list, columns=column_name)
-            anno_df.to_csv('car_labels_train.csv', index=None) #Write list to actual csv file
+            anno_df.to_csv('annotations/car_labels_train_new.csv', index=None) #Write list to actual csv file
             anno_list = []
 
     anno_df = pd.DataFrame(anno_list, columns=column_name)
-    anno_df.to_csv('car_labels_test.csv', index=None) #Write list to actual csv file
+    anno_df.to_csv('annotations/car_labels_test_new.csv', index=None) #Write list to actual csv file
 
 main()
