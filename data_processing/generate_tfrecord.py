@@ -90,13 +90,17 @@ def main(_):
         tf_example = create_tf_example(group, path)
         writer.write(tf_example.SerializeToString())
 
-    ### Write new images ###
+    ### Write images_new ###
     path = os.path.join(os.getcwd(), 'images_new')
     examples = pd.read_csv(FLAGS.csv_input.replace('.csv', '_new.csv'))
     grouped = split(examples, 'filename')
+    x = 0
     for group in grouped:
-        tf_example = create_tf_example(group, path)
-        writer.write(tf_example.SerializeToString())
+        if x == 0: x = 1 #Skip first entry (column name row)
+        else:
+            tf_example = create_tf_example(group, path)
+            writer.write(tf_example.SerializeToString())
+		
 
     writer.close()
     output_path = os.path.join(os.getcwd(), FLAGS.output_path)
