@@ -5,6 +5,7 @@ import glob
 import pandas as pd
 import xml.etree.ElementTree as ET
 from PIL import Image
+import sys
 
 def num_files(path):
     return len(os.listdir(path))
@@ -20,12 +21,12 @@ def parse_xml(anno_list, filename):
 
     for child in root:
         if child.get('occupied') == '1':
-            xmin = child[1][0].get('x') #xy coordinates of included annotations are weirdly formated
-            xmax = child[1][0].get('x')
+            xmin = int(child[1][0].get('x')) #xy coordinates of included annotations are weirdly formated
+            xmax = int(child[1][0].get('x'))
 
-            x1 = child[1][1].get('x')
-            x2 = child[1][2].get('x')
-            x3 = child[1][3].get('x')
+            x1 = int(child[1][1].get('x'))
+            x2 = int(child[1][2].get('x'))
+            x3 = int(child[1][3].get('x'))
 
             if x1 < xmin: xmin = x1 #this code serves to record only the min and max of xy
             if x1 > xmax: xmax = x1
@@ -34,12 +35,12 @@ def parse_xml(anno_list, filename):
             if x3 < xmin: xmin = x3
             if x3 > xmax: xmax = x3
 
-            ymin = child[1][0].get('y') #xy coordinates of included annotations are weirdly formated
-            ymax = child[1][0].get('y')
+            ymin = int(child[1][0].get('y')) #xy coordinates of included annotations are weirdly formated
+            ymax = int(child[1][0].get('y'))
 
-            y1 = child[1][1].get('y')
-            y2 = child[1][2].get('y')
-            y3 = child[1][3].get('y')
+            y1 = int(child[1][1].get('y'))
+            y2 = int(child[1][2].get('y'))
+            y3 = int(child[1][3].get('y'))
 
             if y1 < ymin: ymin = y1 #this code serves to record only the min and max of xy
             if y1 > ymax: ymax = y1
@@ -48,6 +49,9 @@ def parse_xml(anno_list, filename):
             if y3 < ymin: ymin = y3
             if y3 > ymax: ymax = y3
 
+            if int(ymin) >= int(ymax): sys.exit(filename, y1, y2, y3, y4)
+            if int(xmin) >= int(xmax): sys.exit(filename, x1, x2, x3, x4)
+			
             value = (filename.replace('images_new/', '')+'.jpg',
                      width,
                      height,
