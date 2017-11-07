@@ -124,9 +124,10 @@ if __name__ == '__main__':
     main_process.start()
     child_process.start()
 
-    video_capture = cv2.VideoCapture(0)
-    video_capture.set(cv2.CAP_PROP_FRAME_WIDTH, 480)
-    video_capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 360)
+    #video_capture = cv2.VideoCapture(0)
+    video_capture = cv2.VideoCapture('input.avi')
+    #video_capture.set(cv2.CAP_PROP_FRAME_WIDTH, 480)
+    #video_capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 360)
 
     while True:
         _, frame = video_capture.read()
