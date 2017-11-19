@@ -10,3 +10,4 @@ training/feature_extractors/*/*
 training/frozen/
 data_processing/images_new
 data_processing/data/*.record
+object_detection_rcnn_resenet/frozen_inference_graph.pb
