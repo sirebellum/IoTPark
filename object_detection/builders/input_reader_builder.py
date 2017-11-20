@@ -50,7 +50,7 @@ def build(input_reader_config):
   if input_reader_config.WhichOneof('input_reader') == 'tf_record_input_reader':
     config = input_reader_config.tf_record_input_reader
     _, string_tensor = parallel_reader.parallel_read(
-        config.input_path,
+        config.input_path[:],
         reader_class=tf.TFRecordReader,
         num_epochs=(input_reader_config.num_epochs
                     if input_reader_config.num_epochs else None),
