@@ -55,7 +55,8 @@ def detect_objects(image_np, sess, detection_graph):
         np.squeeze(scores),
         category_index,
         use_normalized_coordinates=True,
-        line_thickness=8)
+        line_thickness=8,
+        max_boxes_to_draw=1000)
 
     return image_np
 
