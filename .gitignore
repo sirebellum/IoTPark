@@ -8,5 +8,4 @@ training/train_dir/*
 training/eval_dir/*
 training/feature_extractors/*/*
 training/frozen/
-data_processing/images_new
 data_processing/data/*.record
