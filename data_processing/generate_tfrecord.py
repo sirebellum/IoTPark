@@ -1,11 +1,8 @@
 """
 Usage:
-  # From tensorflow/models/
-  # Create train data:
-  python generate_tfrecord.py --csv_input=data/train_labels.csv  --output_path=train.record
-
-  # Create test data:
-  python generate_tfrecord.py --csv_input=data/test_labels.csv  --output_path=test.record
+  python generate_tfrecord.py --csv_input=data/train_labels.csv \
+			      --output_path=relative/path/ \
+			      --train_ratio=float
 """
 from __future__ import division
 from __future__ import print_function
@@ -20,7 +17,11 @@ from PIL import Image
 import dataset_util
 from collections import namedtuple, OrderedDict
 
+import random
+import math
+
 flags = tf.app.flags
+flags.DEFINE_string('train_ratio', '0.9', 'Ratio of Train to Test data')
 flags.DEFINE_string('csv_input', '', 'Path to the CSV input')
 flags.DEFINE_string('output_path', '', 'Path to output TFRecord')
 FLAGS = flags.FLAGS
@@ -76,32 +77,47 @@ def create_tf_example(group, path):
         'image/object/bbox/ymin': dataset_util.float_list_feature(ymins),
         'image/object/bbox/ymax': dataset_util.float_list_feature(ymaxs),
         'image/object/class/text': dataset_util.bytes_list_feature(classes_text),
-        'image/object/class/label': dataset_util.int64_list_feature(classes),
+        'image/object/class/label': dataset_util.int64_list_feature(classes)
     }))
     return tf_example
 
 
 def main(_):
-    writer = tf.python_io.TFRecordWriter(FLAGS.output_path)
     path = os.path.join(os.getcwd(), 'images')
     examples = pd.read_csv(FLAGS.csv_input)
     grouped = split(examples, 'filename')
-    for group in grouped:
-        tf_example = create_tf_example(group, path)
-        writer.write(tf_example.SerializeToString())
 
-    ### Write images_new ###
-    path = os.path.join(os.getcwd(), 'images_new')
-    examples = pd.read_csv(FLAGS.csv_input.replace('.csv', '_new.csv'))
-    grouped = split(examples, 'filename')
-    for group in grouped:
-        tf_example = create_tf_example(group, path)
+    ###Randomize images for test and train dataset###
+    num_images = len(grouped)
+    train_images = math.ceil(num_images * float(FLAGS.train_ratio))
+    print ('Writing', num_images, 'images:', train_images, 'train_images |', num_images-train_images, 'test images')
+    random.shuffle(grouped)
+
+    ###Create Train tfrecord###
+    path_to_write = FLAGS.output_path #record for later use with test.record
+    FLAGS.output_path = path_to_write + 'train.record' #flag must be a .record file otherwise error
+    writer = tf.python_io.TFRecordWriter(FLAGS.output_path)
+
+    for x in range(0, train_images):
+        tf_example = create_tf_example(grouped[x], path)
         writer.write(tf_example.SerializeToString())
-		
 
     writer.close()
     output_path = os.path.join(os.getcwd(), FLAGS.output_path)
-    print('Successfully created the TFRecords: {}'.format(output_path))
+    print('Successfully created the train TFRecord: {}'.format(output_path))
+
+
+    ###Create Test tfrecord###
+    FLAGS.output_path = path_to_write + 'test.record'
+    writer = tf.python_io.TFRecordWriter(FLAGS.output_path)
+
+    for x in range(train_images, num_images):
+        tf_example = create_tf_example(grouped[x], path)
+        writer.write(tf_example.SerializeToString())
+
+    writer.close()
+    output_path = os.path.join(os.getcwd(), FLAGS.output_path)
+    print('Successfully created the test TFRecord: {}'.format(output_path))
 
 
 if __name__ == '__main__':
