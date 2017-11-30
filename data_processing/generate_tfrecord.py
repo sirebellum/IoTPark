@@ -89,7 +89,7 @@ def main(_):
 
     ###Randomize images for test and train dataset###
     num_images = len(grouped)
-    train_images = math.ceil(num_images * float(FLAGS.train_ratio))
+    train_images = int(math.ceil(num_images * float(FLAGS.train_ratio)))
     print ('Writing', num_images, 'images:', train_images, 'train_images |', num_images-train_images, 'test images')
     random.shuffle(grouped)
 
