@@ -1,3 +1,7 @@
+### USAGE ###
+# python video_detection.py rcnn_resnet_ww48c
+
+
 import cv2
 import multiprocessing
 import time
@@ -10,11 +14,16 @@ from object_detection.utils.app_utils import FPS
 from object_detection.utils import label_map_util
 from object_detection.utils import visualization_utils as vis_util
 
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("frozen_model", help="Specify model ie. rcnn_resnet_ww48c")
+args = parser.parse_args()
+
 CWD_PATH = os.getcwd()
 
 # Path to frozen detection graph. This is the actual model that is used for the object detection.
-MODEL_NAME = 'rcnn_resnet'
-PATH_TO_CKPT = os.path.join(CWD_PATH, 'object_detection', MODEL_NAME, 'frozen_inference_graph.pb')
+#MODEL_NAME = 'rcnn_resnet'
+PATH_TO_CKPT = os.path.join(CWD_PATH, 'training/frozen', args.frozen_model, 'frozen_inference_graph.pb')
 
 # List of the strings that is used to add correct label for each box.
 PATH_TO_LABELS = os.path.join(CWD_PATH, 'data_processing', 'data', 'object-detection.pbtxt')
