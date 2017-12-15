@@ -83,12 +83,10 @@ while True:
 	frame2, boxes, scores = detect_objects(frame, sess, detection_graph)
 	#boxes = [upper-y, upper-x, lower-y, lower-x] : float of image resolution
 
-	#for x in range(0, len(boxes[0])):
-		#if scores[0][x] >= 0.5: #Only print if confidence score above threshold
-			#print(int(boxes[0][x][1]*width),
-			#	  int(boxes[0][x][0]*height),
-			#	  int(boxes[0][x][3]*width),
-			#	  int(boxes[0][x][2]*height))
+	for x in range(0, len(boxes[0])):
+		if scores[0][x] >= 0.5: #Only print if confidence score above threshold
+			print(int((boxes[0][x][1]*width+boxes[0][x][0]*height)/2),
+			      int((boxes[0][x][3]*width+boxes[0][x][2]*height)/2))
 
 	fps = 1/(time.time()-beginning)
-	print(fps)
+	print("FPS:", fps)
