@@ -77,6 +77,7 @@ with detection_graph.as_default():
 
 while True:
 
+	num_cars = 0
 	beginning = time.time()
 
 	_, frame = video_capture.read()
@@ -85,8 +86,10 @@ while True:
 
 	for x in range(0, len(boxes[0])):
 		if scores[0][x] >= 0.5: #Only print if confidence score above threshold
+			num_cars = num_cars + 1
 			print(int((boxes[0][x][1]*width+boxes[0][x][0]*height)/2),
 			      int((boxes[0][x][3]*width+boxes[0][x][2]*height)/2))
 
 	fps = 1/(time.time()-beginning)
+	print(num_cars, "cars present.")
 	print("FPS:", fps)
