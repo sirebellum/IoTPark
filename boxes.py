@@ -7,8 +7,14 @@ import tensorflow as tf
 from object_detection.utils import label_map_util
 from object_detection.utils import visualization_utils as vis_util
 
-PATH_TO_CKPT = '/home/joshua/gits/IoTPark/training/frozen/rcnn_resnet_ww48c_79546/frozen_inference_graph.pb'
-PATH_TO_LABELS = '/home/joshua/gits/IoTPark/data_processing/data/object-detection.pbtxt'
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("frozen_model", help="Specify model ie. rcnn_resnet_ww48c")
+args = parser.parse_args()
+
+CWD_PATH = os.getcwd()
+PATH_TO_CKPT = os.path.join(CWD_PATH, 'training/frozen', args.frozen_model, 'frozen_inference_graph.pb')
+PATH_TO_LABELS = os.path.join(CWD_PATH, 'data_processing', 'data', 'object-detection.pbtxt')
 
 NUM_CLASSES = 1
 
