@@ -6,6 +6,6 @@
 *.swp
 training/train_dir/*
 training/eval_dir/*
-training/frozen/
+training/frozen/*
 data_processing/data/*.record
 training/feature_extractors/*/*
