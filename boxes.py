@@ -42,17 +42,6 @@ def detect_objects(image_np, sess, detection_graph):
         [boxes, scores, classes, num_detections],
         feed_dict={image_tensor: image_np_expanded})
 
-    # Visualization of the results of a detection.
-    vis_util.visualize_boxes_and_labels_on_image_array(
-        image_np,
-        np.squeeze(boxes),
-        np.squeeze(classes).astype(np.int32),
-        np.squeeze(scores),
-        category_index,
-        use_normalized_coordinates=True,
-        line_thickness=5,
-        max_boxes_to_draw=1000)
-
     return image_np, boxes, scores
 
 
@@ -75,20 +64,26 @@ with detection_graph.as_default():
 
     sess = tf.Session(graph=detection_graph)
 
+cars = list()
+	
 while True:
 
-	num_cars = 0
-	beginning = time.time()
+	num_cars = 0 #Reset for counting cars in a frame
+	beginning = time.time() #For FPS calculations
 
 	_, frame = video_capture.read()
 	frame2, boxes, scores = detect_objects(frame, sess, detection_graph)
-	#boxes = [upper-y, upper-x, lower-y, lower-x] : float of image resolution
+	#boxes : [upper-y, upper-x, lower-y, lower-x] : float percentage of image resolution
 
 	for x in range(0, len(boxes[0])):
 		if scores[0][x] >= 0.5: #Only print if confidence score above threshold
 			num_cars = num_cars + 1
+			
+			
+			"""
 			print("x:", int((boxes[0][x][0]*width+boxes[0][x][2]*height)/2),
 			      "y:", int((boxes[0][x][1]*width+boxes[0][x][3]*height)/2))
+			"""
 
 	fps = 1/(time.time()-beginning)
 	print(num_cars, "cars present.")
