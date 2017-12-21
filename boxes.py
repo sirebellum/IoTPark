@@ -13,7 +13,7 @@ parser.add_argument("frozen_model", help="Specify model ie. rcnn_resnet_ww48c")
 args = parser.parse_args()
 
 CWD_PATH = os.getcwd()
-PATH_TO_CKPT = os.path.join(CWD_PATH, 'training/frozen', args.frozen_model, 'frozen_inference_graph.pb')
+PATH_TO_CKPT = os.path.join(CWD_PATH, args.frozen_model, 'frozen_inference_graph.pb')
 PATH_TO_LABELS = os.path.join(CWD_PATH, 'data_processing', 'data', 'object-detection.pbtxt')
 
 NUM_CLASSES = 1
@@ -75,16 +75,30 @@ while True:
 	frame2, boxes, scores = detect_objects(frame, sess, detection_graph)
 	#boxes : [upper-y, upper-x, lower-y, lower-x] : float percentage of image resolution
 
-	for x in range(0, len(boxes[0])):
-		if scores[0][x] >= 0.5: #Only print if confidence score above threshold
+	###CHECK FOR EXISTING CARS###
+	x = 0
+	for box in boxes[0]:
+		if scores[0][x] >= 0.5: #Only if confidence score above threshold
 			num_cars = num_cars + 1
+			upper_x = box[1]
+			upper_y = box[0]
+			lower_x = box[3]
+			lower_y = box[2]
 			
+			for car in cars:
+				if car.distance(upper_x, upper_y, lower_x, lower_y) <= car.delta_pos:
+					car.update(upper_x, upper_y, lower_x, lower_y)
+					del boxes[0][x]
+					del scores[0][x]
+					x = x - 1 #Adjust for one less item in list
 			
-			"""
-			print("x:", int((boxes[0][x][0]*width+boxes[0][x][2]*height)/2),
-			      "y:", int((boxes[0][x][1]*width+boxes[0][x][3]*height)/2))
-			"""
+		x = x + 1 #Index for scores
 
+	for car in cars:
+		print (car.x, car.y)
+	
+			
+			
 	fps = 1/(time.time()-beginning)
 	print(num_cars, "cars present.")
 	print("FPS:", fps)
