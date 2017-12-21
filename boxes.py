@@ -91,7 +91,7 @@ while True:
 			
 			for car in cars:
 				if car.distance(upper_x, upper_y, lower_x, lower_y) <= car.delta_pos:
-					car.update(upper_x, upper_y, lower_x, lower_y)
+					car.update(upper_x, upper_y, lower_x, lower_y, fps)
 					saved = True
 			
 			if not saved:
