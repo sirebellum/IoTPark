@@ -7,6 +7,8 @@ import tensorflow as tf
 from object_detection.utils import label_map_util
 from object_detection.utils import visualization_utils as vis_util
 
+from classes import Car
+
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("frozen_model", help="Specify model ie. rcnn_resnet_ww48c")
@@ -70,6 +72,7 @@ while True:
 
 	num_cars = 0 #Reset for counting cars in a frame
 	beginning = time.time() #For FPS calculations
+	fps = 1
 
 	_, frame = video_capture.read()
 	frame2, boxes, scores = detect_objects(frame, sess, detection_graph)
@@ -77,6 +80,7 @@ while True:
 
 	###CHECK FOR EXISTING CARS###
 	x = 0
+	saved = False #Keep track of if a box is new
 	for box in boxes[0]:
 		if scores[0][x] >= 0.5: #Only if confidence score above threshold
 			num_cars = num_cars + 1
@@ -88,17 +92,20 @@ while True:
 			for car in cars:
 				if car.distance(upper_x, upper_y, lower_x, lower_y) <= car.delta_pos:
 					car.update(upper_x, upper_y, lower_x, lower_y)
-					del boxes[0][x]
-					del scores[0][x]
-					x = x - 1 #Adjust for one less item in list
+					saved = True
 			
-		x = x + 1 #Index for scores
+			if not saved:
+				cars.append(Car(upper_x, upper_y, lower_x, lower_y))
 
+		x = x + 1 #Index for scores
+		saved = False
+
+		
 	for car in cars:
 		print (car.x, car.y)
+		###Subtract from persistence and check for delete
 	
-			
-			
+	
 	fps = 1/(time.time()-beginning)
 	print(num_cars, "cars present.")
 	print("FPS:", fps)
