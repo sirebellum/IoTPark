@@ -84,10 +84,10 @@ while True:
 	for box in boxes[0]:
 		if scores[0][x] >= 0.5: #Only if confidence score above threshold
 			num_cars = num_cars + 1
-			upper_x = box[1]
-			upper_y = box[0]
-			lower_x = box[3]
-			lower_y = box[2]
+			upper_x = box[1]*width
+			upper_y = box[0]*height
+			lower_x = box[3]*width
+			lower_y = box[2]*height
 			
 			for car in cars:
 				if car.distance(upper_x, upper_y, lower_x, lower_y) <= car.delta_pos:
