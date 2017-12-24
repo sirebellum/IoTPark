@@ -103,7 +103,9 @@ while True:
 		
 	for car in cars:
 		print (car.x, car.y)
-		###Subtract from persistence and check for delete
+		car.persistence = car.persistence - 1
+		if car.persistence < 0:
+			del car
 	
 	
 	fps = 1/(time.time()-beginning)
