@@ -27,4 +27,4 @@ class Car:
 		self.size = math.sqrt( pow((upper_x - lower_x), 2) + pow((upper_y - lower_y), 2) )
 		self.delta_pos = 0.1 * self.size
 		self.detections = self.detections + 1
-		self.persistence = 30*FPS*(29/(self.detections+29))
+		self.persistence = 30*FPS*(29/(self.detections+29)) #Allows for a detection to persist for a maximum of 30 seconds

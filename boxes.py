@@ -92,7 +92,7 @@ while True:
 			for car in cars:
 				if car.distance(upper_x, upper_y, lower_x, lower_y) <= car.delta_pos:
 					car.update(upper_x, upper_y, lower_x, lower_y, fps)
-					saved = True
+					saved = True #Don't double up on detections
 			
 			if not saved:
 				cars.append(Car(upper_x, upper_y, lower_x, lower_y))
@@ -101,6 +101,7 @@ while True:
 		saved = False
 
 		
+	###Persistence calculations###	
 	for car in cars:
 		print (car.x, car.y)
 		car.persistence = car.persistence - 1
