@@ -85,7 +85,6 @@ while True:
     saved = False #Keep track of if a box is new
     for box in boxes[0]:
         if scores[0][x] >= 0.5: #Only if confidence score above threshold
-            num_cars = num_cars + 1
             upper_x = box[1]*width
             upper_y = box[0]*height
             lower_x = box[3]*width
@@ -105,15 +104,14 @@ while True:
         
     ###Persistence calculations###    
     for car in cars:
-        print (car.x, car.y)
-        car.persistence = car.persistence - 1
+        car.update_persistence(width, height)
         if car.persistence < 0:
             del car
-        
         ###Draw stuff###
         else:
             frame2 = cv2.circle(frame, (int(car.x), int(car.y)), 5, (0,0,255), -1)
-            frame2 = cv2.putText(frame2, str(round(car.persistence, 2)), (int(car.x)+5, int(car.y)), font, 0.3, (0, 0, 255), 1, cv2.LINE_AA)
+            frame2 = cv2.putText(frame2, str(round(car.id, 2)), (int(car.x)+5, int(car.y)), font, 0.3, (0, 0, 255), 1, cv2.LINE_AA)
+            num_cars = num_cars + 1
     
     cv2.imshow('image', frame2)
     cv2.waitKey(10)

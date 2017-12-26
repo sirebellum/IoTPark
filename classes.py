@@ -29,3 +29,9 @@ class Car:
         if self.detections < 30:        
             self.detections = self.detections + 1
         self.persistence = 0.5*FPS*math.exp(self.detections*0.1)
+
+    def update_persistence(self, res_x, res_y):
+        if (self.x < res_x*0.1 or self.x > res_x*0.9) \
+        or (self.y < res_y*0.1 or self.y > res_y*0.9): #If close to edge, substract double
+            self.persistence = self.persistence - 1
+        self.persistence = self.persistence - 1
