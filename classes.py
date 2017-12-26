@@ -8,7 +8,7 @@ class Car:
         self.x = (upper_x + lower_x)/2
         self.y = (upper_y + lower_y)/2
         self.size = math.sqrt( pow((upper_x - lower_x), 2) + pow((upper_y - lower_y), 2) )
-        self.delta_pos = 0.1 * self.size
+        self.delta_pos = 0.2 * self.size
         self.persistence = 1
         self.detections = 1
         self.id = Car.ID
@@ -25,7 +25,7 @@ class Car:
         self.x = (upper_x + lower_x)/2
         self.y = (upper_y + lower_y)/2
         self.size = math.sqrt( pow((upper_x - lower_x), 2) + pow((upper_y - lower_y), 2) )
-        self.delta_pos = 0.1 * self.size
+        self.delta_pos = 0.2 * self.size
         if self.detections < 30:        
             self.detections = self.detections + 1
         self.persistence = 0.5*FPS*math.exp(self.detections*0.1)
