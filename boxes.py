@@ -112,7 +112,7 @@ while True:
 		else: frame2 = cv2.circle(frame, (int(car.x), int(car.y)), 5, (0,0,255), -1)
 	
 	cv2.imshow('image', frame2)
-	cv2.waitKey(100)
+	cv2.waitKey(10)
 	
 	fps = 1/(time.time()-beginning)
 	print(num_cars, "cars present.")
