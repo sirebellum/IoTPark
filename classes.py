@@ -13,6 +13,7 @@ class Car:
         self.detections = 1
         self.id = Car.ID
         Car.ID = Car.ID + 1
+        self.detected = 1
         
     
     def distance(self, upper_x, upper_y, lower_x, lower_y): #distance between input and car
@@ -29,6 +30,7 @@ class Car:
         if self.detections < 30:        
             self.detections = self.detections + 1
         self.persistence = 0.5*FPS*math.exp(self.detections*0.1)
+        self.detected = 1
 
     def update_persistence(self, res_x, res_y):
         if (self.x < res_x*0.1 or self.x > res_x*0.9) \
