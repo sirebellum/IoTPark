@@ -107,10 +107,10 @@ while True:
         car.update_persistence(width, height)
         if car.persistence < 0:
             del car
-        ###Draw stuff###
+        ###Draw dot and ID number###
         else:
             frame2 = cv2.circle(frame, (int(car.x), int(car.y)), 5, (0,0,255), -1)
-            frame2 = cv2.putText(frame2, str(round(car.id, 2)), (int(car.x)+5, int(car.y)), font, 0.3, (0, 0, 255), 1, cv2.LINE_AA)
+            frame2 = cv2.putText(frame2, str(round(car.id, 2)), (int(car.x)+5, int(car.y)), font, 0.4, (0, 0, 255), 1, cv2.LINE_AA)
             num_cars = num_cars + 1
     
     cv2.imshow('image', frame2)
