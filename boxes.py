@@ -51,7 +51,7 @@ def detect_objects(image_np, sess, detection_graph):
 
 ###MAIN###
 
-video_capture = cv2.VideoCapture('input.new.avi')
+video_capture = cv2.VideoCapture('input.avi')
 width = video_capture.get(3)  # float
 height = video_capture.get(4) # float
 
@@ -114,7 +114,7 @@ while True:
             num_cars = num_cars + 1
     
     cv2.imshow('image', frame2)
-    cv2.waitKey(10)
+    cv2.waitKey(1)
     
     fps = 1/(time.time()-beginning)
     print(num_cars, "cars present.")
