@@ -9,6 +9,8 @@ from object_detection.utils import visualization_utils as vis_util
 
 from classes import Car
 
+font = cv2.FONT_HERSHEY_SIMPLEX
+
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("frozen_model", help="Specify model ie. rcnn_resnet_ww48c")
@@ -49,7 +51,7 @@ def detect_objects(image_np, sess, detection_graph):
 
 ###MAIN###
 
-video_capture = cv2.VideoCapture('input.avi')
+video_capture = cv2.VideoCapture('input.new.avi')
 width = video_capture.get(3)  # float
 height = video_capture.get(4) # float
 
@@ -67,53 +69,55 @@ with detection_graph.as_default():
     sess = tf.Session(graph=detection_graph)
 
 cars = list()
-	
+fps = 1
+    
 while True:
 
-	num_cars = 0 #Reset for counting cars in a frame
-	beginning = time.time() #For FPS calculations
-	fps = 1
+    num_cars = 0 #Reset for counting cars in a frame
+    beginning = time.time() #For FPS calculations
+    
+    _, frame = video_capture.read()
+    frame2, boxes, scores = detect_objects(frame, sess, detection_graph)
+    #boxes : [upper-y, upper-x, lower-y, lower-x] : float percentage of image resolution
 
-	_, frame = video_capture.read()
-	frame2, boxes, scores = detect_objects(frame, sess, detection_graph)
-	#boxes : [upper-y, upper-x, lower-y, lower-x] : float percentage of image resolution
+    ###CHECK FOR EXISTING CARS###
+    x = 0
+    saved = False #Keep track of if a box is new
+    for box in boxes[0]:
+        if scores[0][x] >= 0.5: #Only if confidence score above threshold
+            num_cars = num_cars + 1
+            upper_x = box[1]*width
+            upper_y = box[0]*height
+            lower_x = box[3]*width
+            lower_y = box[2]*height
+            
+            for car in cars:
+                if car.distance(upper_x, upper_y, lower_x, lower_y) <= car.delta_pos:
+                    car.update(upper_x, upper_y, lower_x, lower_y, fps)
+                    saved = True #Don't double up on detections
+            
+            if not saved:
+                cars.append(Car(upper_x, upper_y, lower_x, lower_y))
 
-	###CHECK FOR EXISTING CARS###
-	x = 0
-	saved = False #Keep track of if a box is new
-	for box in boxes[0]:
-		if scores[0][x] >= 0.5: #Only if confidence score above threshold
-			num_cars = num_cars + 1
-			upper_x = box[1]*width
-			upper_y = box[0]*height
-			lower_x = box[3]*width
-			lower_y = box[2]*height
-			
-			for car in cars:
-				if car.distance(upper_x, upper_y, lower_x, lower_y) <= car.delta_pos:
-					car.update(upper_x, upper_y, lower_x, lower_y, fps)
-					saved = True #Don't double up on detections
-			
-			if not saved:
-				cars.append(Car(upper_x, upper_y, lower_x, lower_y))
+        x = x + 1 #Index for scores
+        saved = False
 
-		x = x + 1 #Index for scores
-		saved = False
-
-		
-	###Persistence calculations###	
-	for car in cars:
-		print (car.x, car.y)
-		car.persistence = car.persistence - 1
-		if car.persistence < 0:
-			del car
-		
-		###Draw dots###
-		else: frame2 = cv2.circle(frame, (int(car.x), int(car.y)), 5, (0,0,255), -1)
-	
-	cv2.imshow('image', frame2)
-	cv2.waitKey(10)
-	
-	fps = 1/(time.time()-beginning)
-	print(num_cars, "cars present.")
-	print("FPS:", fps)
+        
+    ###Persistence calculations###    
+    for car in cars:
+        print (car.x, car.y)
+        car.persistence = car.persistence - 1
+        if car.persistence < 0:
+            del car
+        
+        ###Draw stuff###
+        else:
+            frame2 = cv2.circle(frame, (int(car.x), int(car.y)), 5, (0,0,255), -1)
+            frame2 = cv2.putText(frame2, str(round(car.persistence, 2)), (int(car.x)+5, int(car.y)), font, 0.3, (0, 0, 255), 1, cv2.LINE_AA)
+    
+    cv2.imshow('image', frame2)
+    cv2.waitKey(10)
+    
+    fps = 1/(time.time()-beginning)
+    print(num_cars, "cars present.")
+    print("FPS:", fps)
