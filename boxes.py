@@ -105,7 +105,6 @@ while True:
         
     ###Persistence calculations###    
     for car in cars:
-        car.update_persistence(width, height)
         if car.persistence < 0:
             del car
 
@@ -126,6 +125,7 @@ while True:
                                      1, \
                                      cv2.LINE_AA)
 
+            car.update_persistence(width, height)
             num_cars = num_cars + 1
             car.detected = 0 #reset for next run
     
