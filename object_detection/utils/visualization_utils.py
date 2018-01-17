@@ -21,7 +21,8 @@ The functions do not return a value, instead they modify the image itself.
 """
 import collections
 import functools
-import matplotlib.pyplot as plt
+try: import matplotlib.pyplot as plt
+except TypeError: print("Display unreachable!")
 import numpy as np
 import PIL.Image as Image
 import PIL.ImageColor as ImageColor
