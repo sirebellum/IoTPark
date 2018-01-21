@@ -52,7 +52,7 @@ def detect_objects(image_np, sess, detection_graph):
 
 ###MAIN###
 
-video_capture = cv2.VideoCapture('input.avi')
+video_capture = cv2.VideoCapture('input.mp4')
 width = video_capture.get(3)  # float
 height = video_capture.get(4) # float
 
