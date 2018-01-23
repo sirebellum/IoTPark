@@ -379,6 +379,8 @@ def _export_inference_graph(input_type,
   else:
     output_node_names = ','.join(outputs.keys())
 
+  print (output_node_names)
+
   frozen_graph_def = freeze_graph_with_def_protos(
       input_graph_def=tf.get_default_graph().as_graph_def(),
       input_saver_def=input_saver_def,
