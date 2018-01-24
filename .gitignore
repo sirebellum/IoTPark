@@ -9,3 +9,4 @@ training/eval_dir/*
 training/frozen/*
 data_processing/data/*.record
 training/feature_extractors/*/*
+swapfile
