@@ -14,12 +14,14 @@ font = cv2.FONT_HERSHEY_SIMPLEX
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("frozen_model", help="Specify model ie. rcnn_resnet_ww48c")
+parser.add_argument("input", help="Input source? ie. input.mp4")
 parser.add_argument("display", help="Display video? y/n")
 args = parser.parse_args()
 
 CWD_PATH = os.getcwd()
 PATH_TO_CKPT = os.path.join(CWD_PATH, args.frozen_model, 'frozen_inference_graph.pb')
 PATH_TO_LABELS = os.path.join(CWD_PATH, 'data_processing', 'data', 'object-detection.pbtxt')
+PATH_TO_INPUT = os.path.join(CWD_PATH, args.input)
 
 NUM_CLASSES = 1
 
@@ -52,7 +54,7 @@ def detect_objects(image_np, sess, detection_graph):
 
 ###MAIN###
 
-video_capture = cv2.VideoCapture('input.mp4')
+video_capture = cv2.VideoCapture(PATH_TO_INPUT)
 width = video_capture.get(3)  # float
 height = video_capture.get(4) # float
 
