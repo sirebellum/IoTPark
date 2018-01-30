@@ -10,3 +10,4 @@ training/frozen/*
 data_processing/data/*.record
 training/feature_extractors/*/*
 swapfile
+data_processing/images
