@@ -3,6 +3,7 @@ Usage:
   python generate_tfrecord.py --csv_input=data/train_labels.csv \
 			      --output_path=relative/path/ \
 			      --train_ratio=float
+                              --label_map=data/thingy.pbtxt
 """
 from __future__ import division
 from __future__ import print_function
@@ -24,15 +25,17 @@ flags = tf.app.flags
 flags.DEFINE_string('train_ratio', '0.9', 'Ratio of Train to Test data')
 flags.DEFINE_string('csv_input', '', 'Path to the CSV input')
 flags.DEFINE_string('output_path', '', 'Path to output TFRecord')
+flags.DEFINE_string('label_map', '', 'Path to pbtxt label map')
 FLAGS = flags.FLAGS
 
 
-# TO-DO replace this with label map
 def class_text_to_int(row_label):
-    if row_label == 'car':
-        return 1
-    else:
-        None
+    prevline = ""
+
+    with open(FLAGS.label_map, "r") as file:
+        for line in file:
+            if row_label in line: return int(prevline.replace("  id:", ""))
+            prevline = line
 
 
 def split(df, group):
