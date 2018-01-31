@@ -13,11 +13,11 @@ def xml_to_csv(path):
             value = (root.find('filename').text,
                      int(root.find('size').find('width').text),
                      int(root.find('size').find('height').text),
-                     member[0].text,
-                     int(float(member.find('bndbox')[1].text)),
-                     int(float(member.find('bndbox')[3].text)),
-                     int(float(member.find('bndbox')[0].text)),
-                     int(float(member.find('bndbox')[2].text))
+                     member.find('name').text,
+                     int(float(member.find('bndbox').find('xmin').text)),
+                     int(float(member.find('bndbox').find('ymin').text)),
+                     int(float(member.find('bndbox').find('xmax').text)),
+                     int(float(member.find('bndbox').find('ymax').text))
                      )
 
             xml_list.append(value)
