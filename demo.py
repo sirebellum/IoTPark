@@ -14,6 +14,7 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("frozen_model", help="Specify model ie. rcnn_resnet_ww48c")
 parser.add_argument("input", help="Input source? ie. input.mp4")
+parser.add_argument("GPU", help="Fraction of GPU memory to use? 0.5")
 parser.add_argument("display", help="Display video? y/n")
 args = parser.parse_args()
 
@@ -60,6 +61,8 @@ height = video_capture.get(4) # float
 #frame = cv2.imread('image.jpg')
 #height, width, channels = frame.shape
 
+gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=float(args.GPU))
+
 detection_graph = tf.Graph()
 with detection_graph.as_default():
     od_graph_def = tf.GraphDef()
@@ -68,7 +71,7 @@ with detection_graph.as_default():
         od_graph_def.ParseFromString(serialized_graph)
         tf.import_graph_def(od_graph_def, name='')
 
-    sess = tf.Session(graph=detection_graph)
+    sess = tf.Session(graph=detection_graph, config=tf.ConfigProto(gpu_options=gpu_options))
 
 cars = list()
 fps = 1
