@@ -73,22 +73,31 @@ with detection_graph.as_default():
 cars = list()
 fps = 1
 
-while True:
+try:
+    while True:
 
-    beginning = time.time() #For FPS calculations
+        beginning = time.time() #For FPS calculations
 
-    _, frame = video_capture.read()
-    frame2, boxes, scores = detect_objects(frame, sess, detection_graph)
-    #boxes : [upper-y, upper-x, lower-y, lower-x] : float percentage of image resolution
+        _, frame = video_capture.read()
+        if frame is None:
+            sess.close()
+            exit("End of video file!")
 
-    functions.track_cars(boxes, scores, cars, width, height, fps)
-	
-    if args.display == "y":
-        functions.draw_boxes(cars, frame2)
-        cv2.imshow('image', frame2)
-        cv2.waitKey(1)
-	
-    num_cars = functions.persistence(cars, width, height)
-	
-    fps = 1/(time.time()-beginning)
-    print ("FPS:", fps)
+        frame2, boxes, scores = detect_objects(frame, sess, detection_graph)
+        #boxes : [upper-y, upper-x, lower-y, lower-x] : float percentage of image resolution
+
+        functions.track_cars(boxes, scores, cars, width, height, fps)
+
+        if args.display == "y":
+            functions.draw_boxes(cars, frame2)
+            cv2.imshow('image', frame2)
+            cv2.waitKey(1)
+
+        num_cars = functions.persistence(cars, width, height)
+
+        fps = 1/(time.time()-beginning)
+        print ("FPS:", fps)
+
+
+except KeyboardInterrupt:
+    print('interrupted!')
