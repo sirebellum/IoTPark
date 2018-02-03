@@ -6,15 +6,22 @@ then
 fi
 
 # Install prereqs
-sudo apt-get install build-essential cmake pkg-config
-sudo apt-get install libjpeg-dev libtiff5-dev libjasper-dev libpng12-dev
-sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
-sudo apt-get install libxvidcore-dev libx264-dev
-sudo apt-get install libgtk2.0-dev
-sudo apt-get install libatlas-base-dev gfortran
-sudo apt-get install python2.7-dev python3-dev
-sudo apt-get install python3-pip
-sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-bad1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-good1.0-dev
+sudo yum install build-essential cmake pkg-config
+sudo yum install libjpeg-devel libtiff5-devel libjasper-devel libpng12-devel
+sudo yum install libavcodec-devel libavformat-devel libswscale-devel libv4l-devel
+sudo yum install libxvidcore-devel libx264-devel
+sudo yum install libgtk2.0-devel
+sudo yum install libatlas-base-devel gfortran
+sudo yum install gstreamer1-plugins-bad-free-devel.x86_64
+
+sudo yum install epel-release
+sudo yum install python36
+curl -O https://bootstrap.pypa.io/get-pip.py
+sudo /usr/bin/python36 get-pip.py
+
+sudo rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
+sudo rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
+
 
 # Unified directory for building
 mkdir open_cv
@@ -29,7 +36,7 @@ unzip opencv-3.4.0.zip
 unzip opencv_contrib-3.4.0.zip
 
 # python prereqs
-pip3 install numpy
+sudo pip install numpy
 
 # cmake
 cd opencv-3.4.0
